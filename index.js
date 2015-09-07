@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Scores signal based on coverage finger print and returns score.
  *
@@ -15,12 +16,12 @@
  * //=fingerprint
  */
 
+
 module.exports = function (inSignals, refSignals, callback){
   if (!Array.isArray(inSignals)) throw new Error ('Input signals must be an array');
   if (!Array.isArray(refSignals)) throw new Error ('Reference signals must be an array');
 
-
-	var apScore,
+  var apScore,
       fingerPrint = {
   			score: 0,
   			input: inSignals.length,
@@ -28,16 +29,21 @@ module.exports = function (inSignals, refSignals, callback){
   			matches: 0
   		};
 
-		inSignals.forEach(function(ap){
-			refSignals.forEach(function(ref){
-				if (ap.mac === ref.mac && ap.channel === ref.channel){
-					fingerPrint.matches++;
-					apScore = Math.abs(ap.signal_level - ref.signal_level);
-					fingerPrint.score+= apScore;
-				}
-			});
-		});
-    fingerPrint.pMatchIn = fingerPrint.input ? parseFloat(((fingerPrint.matches / fingerPrint.input) * 100).toFixed(2)) : 0;
-    fingerPrint.pMatchRef = parseFloat(((fingerPrint.matches / fingerPrint.ref) * 100).toFixed(2));
-		return callback(fingerPrint);
+
+  function isMatch (ap){
+    refSignals.forEach(function(r){
+      if (ap.mac === r.mac && ap.channel === r.channel){
+        fingerPrint.matches++;
+        apScore = Math.abs(ap.signal_level - r.signal_level);
+        fingerPrint.score+= apScore;
+      }
+    });
+  }
+
+  inSignals.forEach(isMatch);
+
+  fingerPrint.pMatchIn = fingerPrint.input ? parseFloat(((fingerPrint.matches / fingerPrint.input) * 100).toFixed(2)) : 0;
+  fingerPrint.pMatchRef = fingerPrint.ref ? parseFloat(((fingerPrint.matches / fingerPrint.ref) * 100).toFixed(2)) : 0;
+
+	return callback(fingerPrint);
 }
