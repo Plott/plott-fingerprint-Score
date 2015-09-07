@@ -7,7 +7,7 @@ Scores signal based on coverage finger print.
 
 ### `plott.fingerprintScore(inSignal, refSignal, Callback)`
 
-Scores signal based on coverage finger print and returns score.
+Scores signal based on coverage fingerprint and returns score.
 
 
 ### Parameters

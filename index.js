@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Scores signal based on coverage finger print and returns score.
+ * Scores signal based on coverage fingerprint and returns score.
  *
  * @module plott/fingerprintScore
  * @category helper
