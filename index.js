@@ -1,24 +1,38 @@
 /**
- * Converts quality of RSSI signal strength to distance.
+ * Scores signal based on coverage finger print and returns score.
  *
- * @module plott/qualityDistance
+ * @module plott/fingerprintScore
  * @category helper
- * @param {Integer} m dBm RSSI dBm
- * @param {Number} p maximum coverage of signal
- * @return {Number} distance
+ * @param {Array} inSignal Input from wifi scan
+ * @param {Array} refSignal Reference input signals
+ * @param {Function} Callback maximum coverage of signal
+ * @return {Object} fingerprint
  * @example
- * var distance = plott.qualityDistance(-75, 400);
+ * plott.fingerprintScore(inSignals, refSignals, function(fingerprint){
+ *    --Do Something
+ *});
  *
- * //=distance
+ * //=fingerprint
  */
-var isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" &&
-           isFinite(value) &&
-           Math.floor(value) === value;
-};
 
-module.exports = function (m, p) {
-  if (!isInteger(p)) throw new Error ('Maximum coverage of signal must be an integer');
-  m = rssiQuality(m);
-  return p * (1 - m);
-};
+module.exports = function (inSignals, refSignals, callback){
+  if (!Array.isArray(inSignals)) throw new Error ('Input signals must be an array');
+  if (!Array.isArray(refSignals)) throw new Error ('Reference signals must be an array');
+
+	var apScore, fingerPrint = {
+			score: 0,
+			total: inArray.length,
+			matches: 0
+		};
+
+		inSignals.forEach(function(ap){
+			refSignals.forEach(function(ref){
+				if (ap.mac === ref.mac && ap.channel === ref.channel){
+					fingerPrint.matches++;
+					apScore = Math.abs(ap.signal_level - ref.signal_level);
+					fingerPrint.score+= apScore;
+				}
+			});
+		});
+		callback(fingerPrint);
+}
