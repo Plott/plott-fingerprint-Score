@@ -19,11 +19,14 @@ module.exports = function (inSignals, refSignals, callback){
   if (!Array.isArray(inSignals)) throw new Error ('Input signals must be an array');
   if (!Array.isArray(refSignals)) throw new Error ('Reference signals must be an array');
 
-	var apScore, fingerPrint = {
-			score: 0,
-			total: inArray.length,
-			matches: 0
-		};
+
+	var apScore,
+      fingerPrint = {
+  			score: 0,
+  			input: inSignals.length,
+        ref: refSignals.length,
+  			matches: 0
+  		};
 
 		inSignals.forEach(function(ap){
 			refSignals.forEach(function(ref){
@@ -34,5 +37,7 @@ module.exports = function (inSignals, refSignals, callback){
 				}
 			});
 		});
-		callback(fingerPrint);
+    fingerPrint.pMatchIn = fingerPrint.input ? parseFloat(((fingerPrint.matches / fingerPrint.input) * 100).toFixed(2)) : 0;
+    fingerPrint.pMatchRef = parseFloat(((fingerPrint.matches / fingerPrint.ref) * 100).toFixed(2));
+		return callback(fingerPrint);
 }

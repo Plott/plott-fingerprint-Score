@@ -1,0 +1,13 @@
+{
+  "type": "Feature",
+  "properties": {
+    "address": "222 Test St",
+    "floor": 1,
+    "room": "Office",
+    "wifi": []
+  },
+  "geometry": {
+    "type":  "Point" ,
+    "coordinates": [-99.49218749999999, 42.81152174509788]
+  }
+}
